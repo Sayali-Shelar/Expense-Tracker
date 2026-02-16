@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addIncome } from "../Reducer/IncomeSlice";
+import { useNavigate } from "react-router-dom";
 
 const Income = () => {
 const dispatch = useDispatch();
+
+const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     date: "",
@@ -26,18 +29,35 @@ const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+      console.log("Submitting:", formData);
 
 
-     dispatch(
-      addIncome({
-        ...formData,
-        amount : Number(formData.amount),
+    //  dispatch(
+    //   addIncome({
+    //     ...formData,
+    //     amount : Number(formData.amount),
 
 
       
-      })
-     )
-}
+    //   })
+    //  )
+
+      dispatch(
+    addIncome({
+      ...formData,
+      amount: Number(formData.amount),
+    })
+  );
+
+  setFormData({
+    date: "",
+    source: "",
+    category: "",
+    amount: "",
+    description: "",
+  });
+   navigate("/income-dashboard");
+  }
 
   
   return (
@@ -57,7 +77,7 @@ const dispatch = useDispatch();
             name="date"
             value={formData.date}
             onChange={handleChange}
-            required= "true"
+            
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           />
           
@@ -72,7 +92,7 @@ const dispatch = useDispatch();
             placeholder="Income Source"
             value={formData.source}
             onChange={handleChange}
-            required= "true"
+            
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           />
           
@@ -84,7 +104,7 @@ const dispatch = useDispatch();
             name="category"
             value={formData.category}
             onChange={handleChange}
-            required= "true"
+            
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           >
             <option value="">Select Category</option>
@@ -103,7 +123,7 @@ const dispatch = useDispatch();
             placeholder="Amount"
             value={formData.amount}
             onChange={handleChange}
-            required= "true"
+            
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           />
          
@@ -117,7 +137,7 @@ const dispatch = useDispatch();
             placeholder="Description (Optional)"
             value={formData.description}
             onChange={handleChange}
-            required= "true"
+            
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           />
         </div>
@@ -129,9 +149,6 @@ const dispatch = useDispatch();
         >
           Save Income
         </button>
-        <p>
-          {formData.date} - {formData.source} - {formData.category} - ₹{formData.amount} - {formData.description}
-        </p>
         
       </form>
     </div>

@@ -9,10 +9,10 @@
     initialState,
     reducers : {
         addIncome : (state , action) => {
-            const Income ={
+            const Incomes ={
                 ...action.payload
             }
-            state.incomes.push(Income)
+            state.incomes.push(Incomes)
         }
        
     }})

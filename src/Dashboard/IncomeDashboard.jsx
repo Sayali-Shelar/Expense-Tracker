@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const IncomeDashboard = () => {
+ const incomes = useSelector((state) => state.income.incomes);
+ console.log(incomes);
+  
 
 
   return (
@@ -28,8 +32,7 @@ const IncomeDashboard = () => {
         <div className="bg-white shadow-lg rounded-xl p-6 text-center">
           <h3 className="text-gray-500">Total Income</h3>
           <p className="text-2xl font-bold mt-2 text-green-500">
-            ₹75,000
-          </p>
+            ₹{incomes.reduce((sum, income) => sum + income.amount, 0)}          </p>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6 text-center">
@@ -45,6 +48,22 @@ const IncomeDashboard = () => {
             ₹25,000
           </p>
         </div>
+
+      </div>
+
+
+      <div>
+        {incomes.length === 0 ? (
+        <p>No income added</p>
+      ) : (
+        incomes.map((item, index) => (
+          <div key={index}>
+            <p>Source: {item.source}</p>
+            <p>Amount: ₹{item.amount}</p>
+            <hr />
+          </div>
+        ))
+      )}
 
       </div>
     </div>

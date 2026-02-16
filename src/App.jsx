@@ -9,7 +9,7 @@ import Income from './pages/Income';
 import Expense from './pages/Expense';
 import DashboardLayout from './Dashboard/DashboardLayout';
 import OverviewDashboard from './Dashboard/OverviewDashboard';
-
+import IncomeDashboard from './Dashboard/IncomeDashboard';
 
 
 
@@ -25,6 +25,7 @@ const App = () => {
           <Route path='/expense' element={<Expense />} />
           <Route path='/dashboard' element={<DashboardLayout />} />
           <Route path='/overview' element={<OverviewDashboard/>} />
+          <Route path='/income-dashboard' element={<IncomeDashboard/>} />
 
 
         </Routes>
