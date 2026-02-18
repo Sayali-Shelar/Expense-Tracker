@@ -1,6 +1,6 @@
 import React from "react";
 
-const Sidebar = ({ setActivePage, activePage, isOpen, setIsOpen }) => {
+const Sidebar = ({ setActivePage, activePage, isOpen, setIsOpen ,user}) => {
   return (
     <>
       {/* Overlay for Mobile */}
@@ -18,6 +18,20 @@ const Sidebar = ({ setActivePage, activePage, isOpen, setIsOpen }) => {
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
         md:translate-x-0`}
       >
+
+         {user && (
+          <div className="flex items-center gap-3 mb-6 p-3 bg-gray-800 rounded-lg">
+            <div className="w-10 h-10 flex items-center justify-center bg-blue-500 rounded-full text-white font-bold text-lg">
+              {user?.name?.charAt(0).toUpperCase()}
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-400">Welcome</p>
+              <p className="font-semibold">{user?.name}</p>
+            </div>
+          </div>
+        )}
+        
         <h2 className="text-2xl font-bold mb-8 text-center">
           Expense Tracker
         </h2>

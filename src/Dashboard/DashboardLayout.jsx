@@ -8,6 +8,8 @@ const DashboardLayout = () => {
   const [activePage, setActivePage] = useState("overview");
   const [isOpen, setIsOpen] = useState(false);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const renderContent = () => {
     switch (activePage) {
       case "overview":
@@ -28,6 +30,7 @@ const DashboardLayout = () => {
         activePage={activePage}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        user={user}
       />
 
       <div className="flex-1 flex flex-col">

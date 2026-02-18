@@ -10,4 +10,14 @@ const store = configureStore({
 
 })
 
+
+store.subscribe(() => {
+  const state = store.getState();
+  localStorage.setItem(
+    "incomes",
+    JSON.stringify(state.income.incomes)
+  );
+});
+
+
 export default store;

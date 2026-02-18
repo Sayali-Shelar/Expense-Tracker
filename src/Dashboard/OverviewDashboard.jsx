@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom";
+
 
 
 
@@ -20,15 +22,17 @@ import Sidebar from "./Sidebar";
 
         <div className="flex gap-3">
           
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-            Add Income
+        <Link to="/income">
+          <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+          Add Income
           </button>
-         
+        </Link>
+         <Link to="/expense">
           <button
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
             Add Expense
           </button>
+          </Link>
         </div>
       </div>
 
