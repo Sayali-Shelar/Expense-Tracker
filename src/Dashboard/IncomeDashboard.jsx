@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FaMoneyBillWave, FaGift, FaBriefcase, FaTrash, FaEdit } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { deleteIncome , updateIncome } from "../Reducer/IncomeSlice";
 
 
 
@@ -25,6 +26,20 @@ const IncomeDashboard = () => {
     }
   };
   const dispatch = useDispatch();
+
+
+
+  
+
+    const [editId, setEditId] = useState(null);
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+
+  const handleEdit = (item) => {
+    setEditId(item.id);
+    setTitle(item.title);
+    setAmount(item.amount);
+  };
 
   
 
@@ -94,9 +109,24 @@ const IncomeDashboard = () => {
        
 
       <div className="bg-white shadow-lg rounded-xl p-6">
-        <div className="text-end">
+        {/* <div className="text-end">
           Total: {incomes.length}
-          </div>
+          </div> */}
+
+          <div className="flex justify-between items-center 
+                border-b border-gray-300 pb-2">
+
+              <p className="text-sm font-medium text-gray-600">
+               Total Income
+              </p>
+
+                <h3 className="text-2xl  text-emerald-600">
+                  {incomes.length}
+                  </h3>
+
+            </div>
+           
+   
         
         {incomes.length === 0 ? (
           <p className="text-gray-500 text-center">No income added</p>
@@ -104,7 +134,7 @@ const IncomeDashboard = () => {
           incomes.map((item) => (
             <div
               key={item.id}
-              className="flex justify-between items-center border-b py-4"
+              className="flex justify-between items-center mt-4 p-2 bg-gray-50 rounded-lg shadow-sm"
             >
               {/* Left Side */}
               <div className="flex items-center gap-4">
@@ -129,12 +159,15 @@ const IncomeDashboard = () => {
 
               {/* Right Side Buttons */}
               <div className="flex gap-3">
-                <button className="text-blue-500 hover:text-blue-700">
+                <button 
+                 onClick={()=>handleEdit(item)}
+                className="text-blue-500 hover:text-blue-700">
+                 
                   <FaEdit />
                 </button>
 
                 <button
-                  onClick={() => dispatch(deleteIncome(item.id))}
+                  onClick={()=>dispatch(deleteIncome(item.id))}
                   className="text-red-500 hover:text-red-700"
                 >
                   <FaTrash />

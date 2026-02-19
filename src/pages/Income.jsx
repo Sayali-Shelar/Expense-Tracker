@@ -44,6 +44,7 @@ const navigate = useNavigate();
 
       dispatch(
     addIncome({
+      id: Date.now(),
       ...formData,
       amount: Number(formData.amount),
     })

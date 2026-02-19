@@ -1,5 +1,5 @@
  import { createSlice } from "@reduxjs/toolkit";
-import { updateOptions } from "recharts/types/state/rootPropsSlice";
+
  
  
  const savedIncomes = JSON.parse(localStorage.getItem("incomes")) || [];
@@ -20,17 +20,27 @@ import { updateOptions } from "recharts/types/state/rootPropsSlice";
         },
 
         deleteIncome : (state , action) => {
-            state.incomes = state.incomes.filter(income => income.id !== action.payload)
+            const id = action.payload;
+            state.incomes = state.incomes.filter(income => income.id !== id)
          },
 
-        updateIncome : (state , action) => {
-            const { id, updatedData } = action.payload;
-            const index = state.incomes.findIndex(income => income.id === id);
-            if (index !== -1) {
-                state.incomes[index] = { ...state.incomes[index], ...updatedData };
-            }
-         }
-        
+        // updateIncome : (state , action) => {
+        //     const { id, updatedData } = action.payload;
+        //     const index = state.incomes.findIndex(income => income.id === id);
+        //     if (index !== -1) {
+        //         state.incomes[index] = { ...state.incomes[index], ...updatedData };
+        //     }
+        //  }
+           updateExpense: (state, action) => {
+      const updatedData = action.payload;
+
+      state.expenses = state.expenses.map((item) =>
+        item.id === updatedData.id ? updatedData : item
+      );
+
+      localStorage.setItem("expenses", JSON.stringify(state.expenses));
+    }
+  
        
     }})
 
