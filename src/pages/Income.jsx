@@ -1,20 +1,31 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addIncome } from "../Reducer/IncomeSlice";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { addIncome, editIncome } from "../Reducer/IncomeSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Income = () => {
+  const {id} = useParams();
 const dispatch = useDispatch();
 
 const navigate = useNavigate();
 
+const existingIncome = useSelector((state) => 
+  state.income.incomes.find((income) => income.id === Number(id)));
+
   const [formData, setFormData] = useState({
-    date: "",
-    source: "",
-    category: "",
-    amount: "",
+    id: existingIncome ? existingIncome.id : Date.now(),
+    
+    date: existingIncome ? existingIncome.date : "",
+    source: existingIncome ? existingIncome.source : "",
+    category: existingIncome ? existingIncome.category : "",
+    amount: existingIncome ? existingIncome.amount : "",
     description: "",
   });
+  useEffect(() => {
+    if (existingIncome) {
+      setFormData(existingIncome);
+    }
+  }, [existingIncome]);
 
  
 
@@ -30,6 +41,20 @@ const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
       console.log("Submitting:", formData);
+      if (id){
+        dispatch(editIncome({
+          id: Number(id),
+          ...formData,
+          amount: Number(formData.amount),
+        }));
+      } else {
+        dispatch(addIncome({
+          ...formData,
+          amount: Number(formData.amount),
+        }));
+      }
+      navigate("/income-dashboard");
+    }
 
 
     //  dispatch(
@@ -42,23 +67,23 @@ const navigate = useNavigate();
     //   })
     //  )
 
-      dispatch(
-    addIncome({
-      id: Date.now(),
-      ...formData,
-      amount: Number(formData.amount),
-    })
-  );
+  //     dispatch(
+  //   addIncome({
+  //     id: Date.now(),
+  //     ...formData,
+  //     amount: Number(formData.amount),
+  //   })
+  // );
 
-  setFormData({
-    date: "",
-    source: "",
-    category: "",
-    amount: "",
-    description: "",
-  });
-   navigate("/income-dashboard");
-  }
+  // setFormData({
+  //   date: "",
+  //   source: "",
+  //   category: "",
+  //   amount: "",
+  //   description: "",
+  // });
+  //  navigate("/income-dashboard");
+  // }
 
   
   return (
@@ -142,14 +167,22 @@ const navigate = useNavigate();
             className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-green-400"
           />
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-300"
-          
+        <div className="flex justify-between mt-4">
+          <button
+            type="button"
+            onClick={() => navigate("/income-dashboard")}
+            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
+            
         >
-          Save Income
+          {id ? "Update" : "Add "}
         </button>
+        </div>
         
       </form>
     </div>
