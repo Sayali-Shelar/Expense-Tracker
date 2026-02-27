@@ -10,6 +10,7 @@ import Expense from './pages/Expense';
 import DashboardLayout from './Dashboard/DashboardLayout';
 import OverviewDashboard from './Dashboard/OverviewDashboard';
 import IncomeDashboard from './Dashboard/IncomeDashboard';
+import ExpenseDashboard from './Dashboard/ExpenseDashboard';
 
 
 
@@ -24,9 +25,11 @@ const App = () => {
           <Route path='/income' element={<Income />} />
           <Route path='/edit-income/:id' element={<Income />} />
           <Route path='/expense' element={<Expense />} />
+          <Route path='/edit-expense/:id' element={<Expense />} />
           <Route path='/dashboard' element={<DashboardLayout />} />
           <Route path='/overview' element={<OverviewDashboard/>} />
           <Route path='/income-dashboard' element={<IncomeDashboard/>} />
+          <Route path='/expense-dashboard' element={<ExpenseDashboard/>} />
 
 
         </Routes>

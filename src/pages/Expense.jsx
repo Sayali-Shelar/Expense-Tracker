@@ -1,53 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { addExpense, editExpense } from "../Reducer/ExpenseSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Expense= () => {
+  const {id} = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const existingExpense = useSelector((state) => 
+  state.expense.expenses.find((expense) => expense.id === Number(id)));
   const [formData, setFormData] = useState({
-    date: "",
-    title: "",
-    category: "",
-    amount: "",
+    id: existingExpense ? existingExpense.id : Date.now(),
+    date: existingExpense ? existingExpense.date : "",
+    title: existingExpense ? existingExpense.title : "",
+    category: existingExpense ? existingExpense.category : "",
+    amount: existingExpense ? existingExpense.amount : "",
     
     description: "",
   });
+  useEffect(() => {
+    if (existingExpense) {
+      setFormData(existingExpense);
+    }
+  }, [existingExpense]);
 
-  const [errors, setErrors] = useState({});
+  
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const validate = () => {
-    let newErrors = {};
-
-    if (!formData.date) newErrors.date = "Date required";
-    if (!formData.title.trim()) newErrors.title = "Title required";
-    if (!formData.category) newErrors.category = "Category required";
-    if (!formData.amount || formData.amount <= 0)
-      newErrors.amount = "Valid amount required";
-    
-
-    return newErrors;
+    setFormData({ 
+      ...formData, 
+      [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-
-    if (Object.keys(validationErrors).length === 0) {
-      alert("Expense Added Successfully!");
-      console.log(formData);
-      setFormData({
-        date: "",
-        title: "",
-        category: "",
-        amount: "",
-       
-        description: "",
-      });
-      setErrors({});
-    } else {
-      setErrors(validationErrors);
-    }
+      console.log("Submitting:", formData);
+      if (id){
+        dispatch(editExpense({
+          id: Number(id),
+          ...formData,
+          amount: Number(formData.amount),
+        }));
+      } else {
+        dispatch(addExpense({
+          ...formData,
+          amount: Number(formData.amount),
+        }));
+      }
+      navigate("/expense-dashboard");
   };
 
   return (
@@ -59,6 +59,7 @@ const Expense= () => {
         <h2 className="text-2xl font-bold text-center mb-6 text-red-500">
           Add Expense
         </h2>
+        <div className="mb-4">
 
         <input
           type="date"
@@ -68,7 +69,8 @@ const Expense= () => {
           className="w-full border rounded-lg p-2 mb-3"
         />
         {errors.date && <p className="text-red-500 text-sm">{errors.date}</p>}
-
+      </div>
+      <div>
         <input
           type="text"
           name="title"
@@ -77,8 +79,9 @@ const Expense= () => {
           onChange={handleChange}
           className="w-full border rounded-lg p-2 mb-3"
         />
-        {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
-
+        
+      </div>
+      <div>
         <select
           name="category"
           value={formData.category}
@@ -91,11 +94,22 @@ const Expense= () => {
           <option>Rent</option>
           <option>Entertainment</option>
         </select>
-        {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
-
-
         
 
+        </div>
+        <div>
+        <input
+          type="number"
+          name="amount"
+          placeholder="Amount"
+          value={formData.amount}
+          onChange={handleChange}
+          className="w-full border rounded-lg p-2 mb-3"
+        />
+
+        
+        </div>
+        <div className="mb-4">
         <textarea
           name="description"
           placeholder="Description (Optional)"
@@ -103,13 +117,26 @@ const Expense= () => {
           onChange={handleChange}
           className="w-full border rounded-lg p-2 mb-3"
         />
+        </div>
 
-        <button
-          type="submit"
-          className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+        <div className="flex justify-between mt-4">
+          <button
+            type="button"
+            onClick={() => navigate("/expense-dashboard")}
+            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
+            
         >
-          Save Expense
+          {id ? "Update" : "Add "}
         </button>
+        </div>
+
+      
       </form>
     </div>
   );
